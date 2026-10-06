@@ -11,92 +11,116 @@
   --accent:#7c5cff; --accent2:#00e5ff;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{
-  background:var(--bg);color:var(--text);min-height:100vh;
-  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  overflow-x:hidden;
-}
-.bg-glow{position:fixed;inset:0;z-index:-2;overflow:hidden}
+body{background:var(--bg);color:var(--text);min-height:100vh;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+.bg-glow{position:fixed;inset:0;z-index:-3;overflow:hidden}
 .bg-glow span{position:absolute;width:55vmax;height:55vmax;border-radius:50%;filter:blur(110px);opacity:.28;animation:drift 26s ease-in-out infinite alternate}
 .bg-glow span:nth-child(1){background:#7c5cff;top:-20%;left:-15%}
 .bg-glow span:nth-child(2){background:#00b7ff;bottom:-25%;right:-15%;animation-duration:32s;animation-delay:-8s}
 .bg-glow span:nth-child(3){background:#ff2e88;top:35%;left:40%;opacity:.14;animation-duration:38s;animation-delay:-15s}
 @keyframes drift{to{transform:translate(18vw,12vh) scale(1.2)}}
+.grid-bg{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:48px 48px;-webkit-mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%);mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%)}
 #particles{position:fixed;inset:0;z-index:-1;pointer-events:none}
 
-header{text-align:center;padding:56px 20px 24px}
-h1{font-size:clamp(2rem,5vw,3.4rem);font-weight:800;letter-spacing:-.03em;
-  background:linear-gradient(90deg,#fff,var(--accent2) 50%,var(--accent));
-  -webkit-background-clip:text;background-clip:text;color:transparent}
+header{text-align:center;padding:56px 20px 20px}
+h1{font-size:clamp(2.2rem,6vw,3.8rem);font-weight:900;letter-spacing:-.035em;
+  background:linear-gradient(90deg,#fff,var(--accent2),var(--accent),#ff2e88,#fff);background-size:250% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 8s linear infinite}
+@keyframes shine{to{background-position:-250% 0}}
 header p{color:var(--muted);margin-top:8px}
+.next{display:inline-flex;align-items:center;gap:10px;margin-top:20px;padding:9px 18px;border-radius:999px;
+  background:rgba(124,92,255,.14);border:1px solid rgba(124,92,255,.4);font-size:.88rem;backdrop-filter:blur(10px)}
+.next i{width:8px;height:8px;border-radius:50%;background:#2dff8a;box-shadow:0 0 0 0 rgba(45,255,138,.7);animation:ping 1.8s infinite}
+@keyframes ping{to{box-shadow:0 0 0 10px rgba(45,255,138,0)}}
+.next b{font-variant-numeric:tabular-nums}
 
-.search{max-width:520px;margin:26px auto 0;position:relative}
-.search input{
-  width:100%;padding:15px 20px 15px 48px;border-radius:999px;
-  background:var(--glass);border:1px solid var(--border);color:var(--text);
-  font-size:1rem;outline:none;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  transition:border-color .2s,box-shadow .2s;
-}
+.search{max-width:520px;margin:22px auto 0;position:relative}
+.search input{width:100%;padding:15px 20px 15px 48px;border-radius:999px;background:var(--glass);border:1px solid var(--border);color:var(--text);
+  font-size:1rem;outline:none;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:border-color .2s,box-shadow .2s}
 .search input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(124,92,255,.2)}
 .search svg{position:absolute;left:18px;top:50%;transform:translateY(-50%);width:20px;height:20px;stroke:var(--muted);fill:none;stroke-width:2}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:16px}
+.chip{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:14px;cursor:pointer;color:var(--c,#fff);
+  background:var(--glass);border:1px solid var(--border);backdrop-filter:blur(10px);transition:all .2s}
+.chip:hover{transform:translateY(-3px);border-color:var(--c)}
+.chip.on{background:color-mix(in srgb,var(--c) 22%,transparent);border-color:var(--c);box-shadow:0 0 18px -2px var(--c)}
+.chip svg,.plat svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
 main{max-width:1200px;margin:0 auto;padding:20px 20px 80px}
-.grid{display:grid;gap:24px;grid-template-columns:1fr}
+.grid{display:grid;gap:26px;grid-template-columns:1fr}
 @media(min-width:700px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1050px){.grid{grid-template-columns:repeat(3,1fr)}}
 
-.card{
-  background:var(--glass);border:1px solid var(--border);border-radius:22px;overflow:hidden;
-  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-  display:flex;flex-direction:column;
-  transition:transform .3s,border-color .3s,box-shadow .3s;
-  animation:rise .6s both;
-}
-.card:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.25);box-shadow:0 20px 50px -15px var(--glow,rgba(124,92,255,.5))}
-@keyframes rise{from{opacity:0;transform:translateY(20px)}}
-.hero{height:190px;background-size:cover;background-position:center;position:relative}
-.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(10,11,13,.95),rgba(10,11,13,0) 70%)}
-.badges{position:absolute;left:14px;bottom:12px;z-index:1;display:flex;flex-wrap:wrap;gap:6px}
-.badge{font-size:.68rem;font-weight:700;letter-spacing:.06em;padding:4px 10px;border-radius:999px;
-  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(8px);text-transform:uppercase}
-.body{padding:20px 22px 24px;display:flex;flex-direction:column;gap:18px;flex:1}
+.card{--rx:0deg;--ry:0deg;--mx:50%;--my:50%;position:relative;background:var(--glass);border:1px solid var(--border);border-radius:22px;overflow:hidden;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:flex;flex-direction:column;
+  transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition:transform .15s ease-out,border-color .3s,box-shadow .3s;animation:rise .6s backwards}
+.card:hover{border-color:color-mix(in srgb,var(--cc) 70%,#fff 10%);box-shadow:0 24px 60px -18px var(--cc),0 0 0 1px color-mix(in srgb,var(--cc) 35%,transparent)}
+.card::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;border-radius:inherit;
+  background:radial-gradient(380px circle at var(--mx) var(--my),rgba(255,255,255,.13),transparent 45%)}
+.card:hover::after{opacity:1}
+@keyframes rise{from{opacity:0;transform:translateY(24px) scale(.97)}}
+.hero{height:200px;position:relative;overflow:hidden}
+.img{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform 1.2s ease}
+.card:hover .img{transform:scale(1.12)}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(10,11,13,.96),rgba(10,11,13,0) 70%)}
+.hero::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.18) 50%,transparent 60%);transform:translateX(-120%);transition:transform .9s}
+.card:hover .hero::before{transform:translateX(120%)}
+.pill{position:absolute;top:14px;right:14px;z-index:2;font-size:.68rem;font-weight:800;letter-spacing:.1em;padding:6px 12px;border-radius:999px;
+  background:rgba(10,11,13,.65);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(8px);text-transform:uppercase}
+.card.soon .pill{background:rgba(255,80,40,.3);border-color:rgba(255,120,60,.8);animation:pulse 1.6s infinite}
+.card.out .pill{background:rgba(255,106,0,.35);border-color:rgba(255,140,60,.8)}
+.card.tba .pill{background:rgba(124,92,255,.3);border-color:rgba(124,92,255,.8)}
+.badges{position:absolute;left:14px;bottom:12px;z-index:2;display:flex;flex-wrap:wrap;gap:8px}
+.plat{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;color:var(--c,#fff);
+  background:rgba(10,11,13,.6);border:1px solid color-mix(in srgb,var(--c) 55%,transparent);backdrop-filter:blur(8px);transition:transform .2s}
+.plat:hover{transform:translateY(-3px) scale(1.1)}
+.plat svg{width:19px;height:19px}
+.plat.txt{width:auto;padding:0 10px;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.body{padding:20px 22px 24px;display:flex;flex-direction:column;gap:18px;flex:1;position:relative;z-index:1}
 .title{font-size:1.3rem;font-weight:700;letter-spacing:-.01em}
 .date{font-size:.8rem;color:var(--muted);margin-top:4px}
 
 .countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.unit{background:rgba(0,0,0,.35);border:1px solid var(--border);border-radius:14px;padding:12px 4px;text-align:center}
-.unit b{display:block;font-size:1.7rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.unit{background:rgba(0,0,0,.38);border:1px solid var(--border);border-radius:14px;padding:12px 4px;text-align:center;position:relative;overflow:hidden}
+.unit::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--cc),transparent)}
+.unit b{display:block;font-size:1.75rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.unit b.pop{animation:pop .35s}
+@keyframes pop{40%{transform:translateY(-3px);color:var(--cc)}}
 .unit small{display:block;margin-top:6px;font-size:.62rem;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
 .live,.tbabox{display:none;text-align:center;padding:22px 10px;border-radius:14px;font-size:1.5rem;font-weight:800;letter-spacing:.04em}
 .live{background:linear-gradient(135deg,rgba(255,106,0,.25),rgba(255,46,100,.25));border:1px solid rgba(255,120,60,.5);animation:pulse 2s ease-in-out infinite}
 .tbabox{background:rgba(124,92,255,.14);border:1px dashed rgba(124,92,255,.55);font-size:1.15rem;line-height:1.35}
 .tbabox small{display:block;font-size:.7rem;font-weight:600;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-top:4px}
 @keyframes pulse{50%{box-shadow:0 0 30px rgba(255,100,50,.45)}}
-.card.out .countdown{display:none}
+.card.out .countdown,.card.tba .countdown{display:none}
 .card.out .live{display:block}
-.card.tba .countdown{display:none}
 .card.tba .tbabox{display:block}
 
-.btn{margin-top:auto;display:block;text-align:center;text-decoration:none;color:#fff;font-weight:700;
-  padding:13px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#4f8cff);
-  transition:filter .2s,transform .2s}
-.btn:hover{filter:brightness(1.15);transform:scale(1.02)}
+.btn{margin-top:auto;display:block;text-align:center;text-decoration:none;color:#fff;font-weight:700;padding:13px;border-radius:12px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--accent),#4f8cff);transition:filter .2s,transform .2s}
+.btn:hover{filter:brightness(1.18);transform:scale(1.03)}
 .empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:60px 0;display:none}
 footer{text-align:center;color:var(--muted);font-size:.75rem;padding-bottom:30px}
-@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div class="bg-glow"><span></span><span></span><span></span></div>
+<div class="grid-bg"></div>
 <canvas id="particles"></canvas>
 
 <header>
   <h1>Release Radar</h1>
   <p>Live countdowns to the games you're waiting for · all times synced to UTC</p>
+  <div class="next" id="next" style="display:none"><i></i><span id="nextTxt"></span></div>
   <div class="search">
     <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
     <input id="search" type="search" placeholder="Search by title or platform (e.g. PS5, Switch 2)…" autocomplete="off">
   </div>
+  <div class="chips" id="chips"></div>
 </header>
 
 <main>
@@ -110,111 +134,80 @@ footer{text-align:center;color:var(--muted);font-size:.75rem;padding-bottom:30px
    GAME DATA — add, remove, or edit games here.
    releaseDate: UTC ISO string ending in "Z", OR null if no exact
                 date is announced yet (then set `window`, e.g. "2027").
-   image:       leave "" for an auto-generated gradient fallback.
-   color:       accent used for the fallback gradient & card glow.
-   Cards auto-sort by date (soonest first, TBA last).
+   image:       "images/file.jpg" or a URL. "" = gradient fallback.
+   color:       accent for the card glow & fallback gradient.
+   platforms:   "PC", "PS5", "PS4", "Xbox", "Switch", "Switch 2"
+                (anything else shows as a text badge).
    ============================================================ */
 const GAMES = [
-  {
-    title: "Grand Theft Auto VI",
-    releaseDate: "2026-11-19T00:00:00Z",
-    platforms: ["PS5", "Xbox"],
-    image: "gta 6 cover.jpg",
-    storeLink: "https://www.rockstargames.com/VI",
-    color: "#ff2e88"
-  },
-  {
-    title: "Phantom Blade Zero",
-    releaseDate: "2026-10-29T00:00:00Z",   // verify before publishing
-    platforms: ["PC", "PS5"],
-    image: "",
-    storeLink: "https://store.steampowered.com/search/?term=Phantom+Blade+Zero",
-    color: "#ff6a00"
-  },
-  {
-    title: "Dragon Quest Monsters: The Withered World",
-    releaseDate: "2026-12-03T00:00:00Z",
-    platforms: ["PC", "PS5", "Xbox", "Switch", "Switch 2"],
-    image: "",
-    storeLink: "https://www.dragonquest.com/",
-    color: "#00b7ff"
-  },
-  {
-    title: "Until Dawn 2",
-    releaseDate: "2027-01-28T00:00:00Z",
-    platforms: ["PS5"],
-    image: "",
-    storeLink: "https://store.playstation.com/",
-    color: "#c0392b"
-  },
-  {
-    title: "Tomb Raider: Legacy of Atlantis",
-    releaseDate: "2027-02-12T00:00:00Z",
-    platforms: ["PC", "PS5", "Xbox"],
-    image: "",
-    storeLink: "https://store.steampowered.com/search/?term=Tomb+Raider+Legacy+of+Atlantis",
-    color: "#1abc9c"
-  },
-  {
-    title: "Final Fantasy VII Revelation",
-    releaseDate: "2027-04-08T00:00:00Z",
-    platforms: ["PS5", "Xbox", "Switch 2", "PC"],
-    image: "",
-    storeLink: "https://store.na.square-enix-games.com/",
-    color: "#4f8cff"
-  },
-  {
-    title: "Resident Evil Veronica",
-    releaseDate: null,          // no exact date announced yet
-    window: "2027",
-    platforms: ["PC", "PS5", "Xbox", "Switch 2"],
-    image: "",
-    storeLink: "https://www.residentevil.com/",
-    color: "#e11d48"
-  }
+  { title:"Grand Theft Auto VI", releaseDate:"2026-11-19T00:00:00Z", platforms:["PS5","Xbox"],
+    image:"", storeLink:"https://www.rockstargames.com/VI", color:"#ff2e88" },
+  { title:"Phantom Blade Zero", releaseDate:"2026-10-29T00:00:00Z",   // verify before publishing
+    platforms:["PC","PS5"], image:"",
+    storeLink:"https://store.steampowered.com/search/?term=Phantom+Blade+Zero", color:"#ff6a00" },
+  { title:"Dragon Quest Monsters: The Withered World", releaseDate:"2026-12-03T00:00:00Z",
+    platforms:["PC","PS5","Xbox","Switch","Switch 2"], image:"", storeLink:"https://www.dragonquest.com/", color:"#00b7ff" },
+  { title:"Until Dawn 2", releaseDate:"2027-01-28T00:00:00Z", platforms:["PS5"],
+    image:"", storeLink:"https://store.playstation.com/", color:"#c0392b" },
+  { title:"Tomb Raider: Legacy of Atlantis", releaseDate:"2027-02-12T00:00:00Z", platforms:["PC","PS5","Xbox"],
+    image:"", storeLink:"https://store.steampowered.com/search/?term=Tomb+Raider+Legacy+of+Atlantis", color:"#1abc9c" },
+  { title:"Final Fantasy VII Revelation", releaseDate:"2027-04-08T00:00:00Z", platforms:["PS5","Xbox","Switch 2","PC"],
+    image:"", storeLink:"https://store.na.square-enix-games.com/", color:"#4f8cff" },
+  { title:"Resident Evil Veronica", releaseDate:null, window:"2027", platforms:["PC","PS5","Xbox","Switch 2"],
+    image:"", storeLink:"https://www.residentevil.com/", color:"#e11d48" }
 ];
+
+/* ============================================================
+   PLATFORM ICONS (simple inline SVG, colored per platform)
+   ============================================================ */
+const sw = '<rect x="3" y="3" width="7" height="18" rx="3.5"/><rect x="14" y="3" width="7" height="18" rx="3.5"/><circle cx="6.5" cy="8" r="1"/><circle cx="17.5" cy="16" r="1"/>';
+const PLAT = {
+  "pc":       {c:"#9ad0ff", n:"PC",       svg:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>'},
+  "ps5":      {c:"#4f8cff", n:"PS5",      svg:'<path d="M7 3.5l3 5H4z"/><circle cx="17" cy="6.2" r="2.6"/><path d="M14.5 14.5l5 5M19.5 14.5l-5 5"/><rect x="4" y="14.5" width="5.5" height="5.5" rx=".6"/>'},
+  "ps4":      {c:"#4f8cff", n:"PS4",      svg:'<path d="M7 3.5l3 5H4z"/><circle cx="17" cy="6.2" r="2.6"/><path d="M14.5 14.5l5 5M19.5 14.5l-5 5"/><rect x="4" y="14.5" width="5.5" height="5.5" rx=".6"/>'},
+  "xbox":     {c:"#3ddc84", n:"Xbox",     svg:'<circle cx="12" cy="12" r="9"/><path d="M7.5 7.5c2 2 3 3.5 4.5 4.5 1.500-1 2.500-2.500 4.500-4.500M7.500 16.500c2-2 3-3.500 4.500-4.500 1.500 1 2.500 2.500 4.500 4.500"/>'},
+  "switch":   {c:"#ff4d5e", n:"Switch",   svg:sw},
+  "switch 2": {c:"#ff4d5e", n:"Switch 2", svg:sw + '<path d="M10.600 11.200h2.800" stroke-width="0"/>'}
+};
+const platKey = p => String(p).trim().toLowerCase();
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function platIcon(p, cls){
+  const d = PLAT[platKey(p)];
+  return d ? `<span class="${cls}" style="--c:${d.c}" title="${d.n}" aria-label="${d.n}" data-p="${platKey(p)}"><svg viewBox="0 0 24 24">${d.svg}</svg></span>`
+           : `<span class="${cls} txt" title="${esc(p)}" data-p="${esc(platKey(p))}">${esc(p)}</span>`;
+}
 
 /* ============================================================
    ENGINE
    ============================================================ */
-const grid = document.getElementById("grid");
-const emptyMsg = document.getElementById("empty");
+const grid = document.getElementById("grid"), emptyMsg = document.getElementById("empty");
 const pad = n => String(n).padStart(2, "0");
-const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const ts = g => g.releaseDate ? Date.parse(g.releaseDate) : Infinity;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 function heroStyle(g){
-  const c = g.color || "#7c5cff";
-  const grad = `linear-gradient(135deg, ${c}, #0a0b0d 85%)`;
+  const c = g.color || "#7c5cff", grad = `linear-gradient(135deg, ${c}, #0a0b0d 85%)`;
   return g.image ? `background-image:url('${encodeURI(g.image)}'),${grad}` : `background-image:${grad}`;
 }
 
-// Sort: soonest first, TBA games last
-const sorted = GAMES.slice().sort((a, b) => {
-  const x = ts(a), y = ts(b);
-  return x === y ? 0 : x < y ? -1 : 1;
-});
+const sorted = GAMES.slice().sort((a, b) => { const x = ts(a), y = ts(b); return x === y ? 0 : x < y ? -1 : 1; });
 
-// Build cards once; keep refs so the tick only touches text nodes.
 const items = sorted.map((g, i) => {
-  const tba = !g.releaseDate;
-  const target = ts(g);
+  const tba = !g.releaseDate, target = ts(g);
   const el = document.createElement("article");
   el.className = "card" + (tba ? " tba" : "");
   el.style.animationDelay = (i * 80) + "ms";
-  el.style.setProperty("--glow", (g.color || "#7c5cff") + "88");
-  const dateLabel = tba
-    ? `Release window: ${esc(g.window || "TBA")}`
+  el.style.setProperty("--cc", g.color || "#7c5cff");
+  const dateLabel = tba ? `Release window: ${esc(g.window || "TBA")}`
     : new Date(target).toLocaleString(undefined, {dateStyle:"long", timeStyle:"short"});
   el.innerHTML = `
-    <div class="hero" style="${heroStyle(g)}">
-      <div class="badges">${g.platforms.map(p => `<span class="badge">${esc(p)}</span>`).join("")}</div>
+    <div class="hero">
+      <div class="img" style="${heroStyle(g)}"></div>
+      <span class="pill" data-pill>${tba ? "TBA " + esc(g.window || "") : "…"}</span>
+      <div class="badges">${g.platforms.map(p => platIcon(p, "plat")).join("")}</div>
     </div>
     <div class="body">
-      <div>
-        <h2 class="title">${esc(g.title)}</h2>
-        <div class="date">${dateLabel}</div>
-      </div>
+      <div><h2 class="title">${esc(g.title)}</h2><div class="date">${dateLabel}</div></div>
       <div class="countdown">
         <div class="unit"><b data-d>00</b><small>Days</small></div>
         <div class="unit"><b data-h>00</b><small>Hours</small></div>
@@ -225,34 +218,56 @@ const items = sorted.map((g, i) => {
       <div class="tbabox">📅 Date TBA<small>Launching ${esc(g.window || "TBA")}</small></div>
       <a class="btn" href="${esc(g.storeLink)}" target="_blank" rel="noopener noreferrer">View Store</a>
     </div>`;
+  // 3D tilt + cursor spotlight (mouse only)
+  if(!reduce){
+    el.addEventListener("pointermove", e => {
+      if(e.pointerType === "touch") return;
+      const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+      el.style.setProperty("--mx", x * 100 + "%"); el.style.setProperty("--my", y * 100 + "%");
+      el.style.setProperty("--ry", ((x - .5) * 10).toFixed(2) + "deg"); el.style.setProperty("--rx", ((.5 - y) * 8).toFixed(2) + "deg");
+    });
+    el.addEventListener("pointerleave", () => { el.style.setProperty("--rx", "0deg"); el.style.setProperty("--ry", "0deg"); });
+  }
   grid.appendChild(el);
-  return {
-    g, el, target, out: tba,   // TBA cards are skipped by the ticker
-    d: el.querySelector("[data-d]"), h: el.querySelector("[data-h]"),
-    m: el.querySelector("[data-m]"), s: el.querySelector("[data-s]"),
-    haystack: (g.title + " " + g.platforms.join(" ")).toLowerCase()
-  };
+  return { g, el, target, out: tba, tba,
+    d: el.querySelector("[data-d]"), h: el.querySelector("[data-h]"), m: el.querySelector("[data-m]"), s: el.querySelector("[data-s]"),
+    pill: el.querySelector("[data-pill]"),
+    haystack: (g.title + " " + g.platforms.join(" ")).toLowerCase(),
+    keys: g.platforms.map(platKey) };
 });
 
-function setText(node, v){ if(node.textContent !== v) node.textContent = v; }
+function setText(node, v, pop){
+  if(node.textContent !== v){ node.textContent = v;
+    if(pop && !reduce){ node.classList.remove("pop"); void node.offsetWidth; node.classList.add("pop"); } }
+}
+
+const nextBox = document.getElementById("next"), nextTxt = document.getElementById("nextTxt");
 
 // Single interval updates every card.
 function tick(){
   const now = Date.now();
+  let upcoming = null;
   for(const it of items){
-    if(it.out) continue;
+    if(it.tba) continue;
     const diff = it.target - now;
     if(diff <= 0){
-      it.out = true;
-      it.el.classList.add("out");
+      if(!it.out){ it.out = true; it.el.classList.remove("soon"); it.el.classList.add("out"); setText(it.pill, "🔥 Out now"); }
       continue;
     }
-    const t = Math.floor(diff / 1000);
-    setText(it.d, pad(Math.floor(t / 86400)));
+    if(!upcoming) upcoming = {it, diff};
+    const t = Math.floor(diff / 1000), days = Math.floor(t / 86400);
+    setText(it.d, pad(days));
     setText(it.h, pad(Math.floor(t % 86400 / 3600)));
     setText(it.m, pad(Math.floor(t % 3600 / 60)));
-    setText(it.s, pad(t % 60));
+    setText(it.s, pad(t % 60), true);
+    if(days < 7){ it.el.classList.add("soon"); setText(it.pill, "🔥 Soon"); }
+    else setText(it.pill, "In " + days + " days");
   }
+  if(upcoming){
+    const t = Math.floor(upcoming.diff / 1000);
+    nextBox.style.display = "inline-flex";
+    setText(nextTxt, `Next up: ${upcoming.it.g.title} · ${Math.floor(t/86400)}d ${pad(Math.floor(t%86400/3600))}h ${pad(Math.floor(t%3600/60))}m ${pad(t%60)}s`);
+  } else nextBox.style.display = "none";
 }
 tick();
 let timer = setInterval(tick, 1000);
@@ -261,32 +276,45 @@ document.addEventListener("visibilitychange", () => {
   if(!document.hidden){ tick(); timer = setInterval(tick, 1000); }
 });
 
-// Search / filter by title or platform
-document.getElementById("search").addEventListener("input", e => {
-  const q = e.target.value.trim().toLowerCase();
+// Platform filter chips + search
+const chipsEl = document.getElementById("chips"), searchEl = document.getElementById("search");
+const activeP = new Set();
+const seen = [];
+GAMES.forEach(g => g.platforms.forEach(p => { if(!seen.some(x => platKey(x) === platKey(p))) seen.push(p); }));
+chipsEl.innerHTML = seen.map(p => platIcon(p, "chip")).join("");
+chipsEl.addEventListener("click", e => {
+  const c = e.target.closest(".chip"); if(!c) return;
+  const k = c.dataset.p;
+  activeP.has(k) ? activeP.delete(k) : activeP.add(k);
+  c.classList.toggle("on", activeP.has(k));
+  applyFilter();
+});
+function applyFilter(){
+  const q = searchEl.value.trim().toLowerCase();
   let shown = 0;
   for(const it of items){
-    const match = !q || it.haystack.includes(q);
+    const okQ = !q || it.haystack.includes(q);
+    const okP = !activeP.size || [...activeP].every(k => it.keys.includes(k));
+    const match = okQ && okP;
     it.el.style.display = match ? "" : "none";
     if(match) shown++;
   }
   emptyMsg.style.display = shown ? "none" : "block";
-});
+}
+searchEl.addEventListener("input", applyFilter);
 
 /* ============================================================
    PARTICLES (lightweight canvas)
    ============================================================ */
 (function(){
   const cv = document.getElementById("particles"), ctx = cv.getContext("2d");
-  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if(reduce) return;
   let w, h, pts = [];
   function resize(){
     w = cv.width = innerWidth; h = cv.height = innerHeight;
     pts = Array.from({length: Math.min(70, Math.floor(w * h / 22000))}, () => ({
-      x: Math.random()*w, y: Math.random()*h,
-      r: Math.random()*1.6 + .4, vx: (Math.random()-.5)*.25, vy: -Math.random()*.35 - .05,
-      a: Math.random()*.5 + .15
-    }));
+      x: Math.random()*w, y: Math.random()*h, r: Math.random()*1.6 + .4,
+      vx: (Math.random()-.5)*.25, vy: -Math.random()*.35 - .05, a: Math.random()*.5 + .15 }));
   }
   resize(); addEventListener("resize", resize);
   (function frame(){
