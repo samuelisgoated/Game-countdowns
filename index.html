@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Release Radar · Game Countdowns</title>
+<style>
+:root{
+  --bg:#0a0b0d; --text:#eef0f6; --muted:#8b90a0;
+  --glass:rgba(255,255,255,.05); --border:rgba(255,255,255,.1);
+  --accent:#7c5cff; --accent2:#00e5ff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg);color:var(--text);min-height:100vh;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  overflow-x:hidden;
+}
+/* Animated gradient background */
+.bg-glow{position:fixed;inset:0;z-index:-2;overflow:hidden}
+.bg-glow span{position:absolute;width:55vmax;height:55vmax;border-radius:50%;filter:blur(110px);opacity:.28;animation:drift 26s ease-in-out infinite alternate}
+.bg-glow span:nth-child(1){background:#7c5cff;top:-20%;left:-15%}
+.bg-glow span:nth-child(2){background:#00b7ff;bottom:-25%;right:-15%;animation-duration:32s;animation-delay:-8s}
+.bg-glow span:nth-child(3){background:#ff2e88;top:35%;left:40%;opacity:.14;animation-duration:38s;animation-delay:-15s}
+@keyframes drift{to{transform:translate(18vw,12vh) scale(1.2)}}
+#particles{position:fixed;inset:0;z-index:-1;pointer-events:none}
+
+header{text-align:center;padding:56px 20px 24px}
+h1{font-size:clamp(2rem,5vw,3.4rem);font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(90deg,#fff,var(--accent2) 50%,var(--accent));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+header p{color:var(--muted);margin-top:8px}
+
+.search{max-width:520px;margin:26px auto 0;position:relative}
+.search input{
+  width:100%;padding:15px 20px 15px 48px;border-radius:999px;
+  background:var(--glass);border:1px solid var(--border);color:var(--text);
+  font-size:1rem;outline:none;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  transition:border-color .2s,box-shadow .2s;
+}
+.search input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(124,92,255,.2)}
+.search svg{position:absolute;left:18px;top:50%;transform:translateY(-50%);width:20px;height:20px;stroke:var(--muted);fill:none;stroke-width:2}
+
+main{max-width:1200px;margin:0 auto;padding:20px 20px 80px}
+.grid{display:grid;gap:24px;grid-template-columns:1fr}
+@media(min-width:700px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1050px){.grid{grid-template-columns:repeat(3,1fr)}}
+
+.card{
+  background:var(--glass);border:1px solid var(--border);border-radius:22px;overflow:hidden;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  display:flex;flex-direction:column;
+  transition:transform .3s,border-color .3s,box-shadow .3s;
+  animation:rise .6s both;
+}
+.card:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.25);box-shadow:0 20px 50px -15px var(--glow,rgba(124,92,255,.5))}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}}
+.hero{height:190px;background-size:cover;background-position:center;position:relative}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(10,11,13,.95),rgba(10,11,13,0) 70%)}
+.badges{position:absolute;left:14px;bottom:12px;z-index:1;display:flex;flex-wrap:wrap;gap:6px}
+.badge{font-size:.68rem;font-weight:700;letter-spacing:.06em;padding:4px 10px;border-radius:999px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(8px);text-transform:uppercase}
+.body{padding:20px 22px 24px;display:flex;flex-direction:column;gap:18px;flex:1}
+.title{font-size:1.3rem;font-weight:700;letter-spacing:-.01em}
+.date{font-size:.8rem;color:var(--muted);margin-top:4px}
+
+.countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.unit{background:rgba(0,0,0,.35);border:1px solid var(--border);border-radius:14px;padding:12px 4px;text-align:center}
+.unit b{display:block;font-size:1.7rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.unit small{display:block;margin-top:6px;font-size:.62rem;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.live{display:none;text-align:center;padding:22px 10px;border-radius:14px;font-size:1.5rem;font-weight:800;letter-spacing:.04em;
+  background:linear-gradient(135deg,rgba(255,106,0,.25),rgba(255,46,100,.25));border:1px solid rgba(255,120,60,.5);
+  animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 30px rgba(255,100,50,.45)}}
+.card.out .countdown{display:none}
+.card.out .live{display:block}
+
+.btn{margin-top:auto;display:block;text-align:center;text-decoration:none;color:#fff;font-weight:700;
+  padding:13px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#4f8cff);
+  transition:filter .2s,transform .2s}
+.btn:hover{filter:brightness(1.15);transform:scale(1.02)}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:60px 0;display:none}
+footer{text-align:center;color:var(--muted);font-size:.75rem;padding-bottom:30px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="bg-glow"><span></span><span></span><span></span></div>
+<canvas id="particles"></canvas>
+
+<header>
+  <h1>Release Radar</h1>
+  <p>Live countdowns to the games you're waiting for · all times synced to UTC</p>
+  <div class="search">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <input id="search" type="search" placeholder="Search by title or platform (e.g. PS5, Switch)…" autocomplete="off">
+  </div>
+</header>
+
+<main>
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty">No games match your search.</p>
+</main>
+<footer>Dates are subject to change by publishers. Edit the <code>GAMES</code> array to customize.</footer>
+
+<script>
+/* ============================================================
+   GAME DATA — add, remove, or edit games here.
+   releaseDate must be a UTC ISO string ending in "Z".
+   image: leave "" to use an auto-generated gradient fallback.
+   color: accent used for the fallback gradient & card glow.
+   ============================================================ */
+const GAMES = [
+  {
+    title: "Grand Theft Auto VI",
+    releaseDate: "2026-11-19T00:00:00Z",
+    platforms: ["PS5", "Xbox"],
+    image: "",
+    storeLink: "https://www.rockstargames.com/VI",
+    color: "#ff2e88"
+  },
+  {
+    title: "Phantom Blade Zero",
+    releaseDate: "2026-10-29T00:00:00Z",   // verify before publishing
+    platforms: ["PC", "PS5"],
+    image: "",
+    storeLink: "https://store.steampowered.com/search/?term=Phantom+Blade+Zero",
+    color: "#ff6a00"
+  },
+  {
+    title: "Dragon Quest Monsters: The Withered World",
+    releaseDate: "2026-12-03T00:00:00Z",
+    platforms: ["PC", "PS5", "Xbox", "Switch"],
+    image: "",
+    storeLink: "https://www.dragonquest.com/",
+    color: "#00b7ff"
+  }
+];
+
+/* ============================================================
+   ENGINE
+   ============================================================ */
+const grid = document.getElementById("grid");
+const emptyMsg = document.getElementById("empty");
+const pad = n => String(n).padStart(2, "0");
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function heroStyle(g){
+  const c = g.color || "#7c5cff";
+  const grad = `linear-gradient(135deg, ${c}, #0a0b0d 85%)`;
+  return g.image ? `background-image:url('${encodeURI(g.image)}'),${grad}` : `background-image:${grad}`;
+}
+
+// Build cards once; keep refs so the tick only touches text nodes.
+const items = GAMES.map((g, i) => {
+  const target = Date.parse(g.releaseDate);               // fixed UTC timestamp
+  const el = document.createElement("article");
+  el.className = "card";
+  el.style.animationDelay = (i * 80) + "ms";
+  el.style.setProperty("--glow", (g.color || "#7c5cff") + "88");
+  el.innerHTML = `
+    <div class="hero" style="${heroStyle(g)}">
+      <div class="badges">${g.platforms.map(p => `<span class="badge">${esc(p)}</span>`).join("")}</div>
+    </div>
+    <div class="body">
+      <div>
+        <h2 class="title">${esc(g.title)}</h2>
+        <div class="date">${new Date(target).toLocaleString(undefined,{dateStyle:"long",timeStyle:"short"})}</div>
+      </div>
+      <div class="countdown">
+        <div class="unit"><b data-d>00</b><small>Days</small></div>
+        <div class="unit"><b data-h>00</b><small>Hours</small></div>
+        <div class="unit"><b data-m>00</b><small>Min</small></div>
+        <div class="unit"><b data-s>00</b><small>Sec</small></div>
+      </div>
+      <div class="live">🔥 OUT NOW</div>
+      <a class="btn" href="${esc(g.storeLink)}" target="_blank" rel="noopener noreferrer">View Store</a>
+    </div>`;
+  grid.appendChild(el);
+  return {
+    g, el, target, out:false,
+    d: el.querySelector("[data-d]"), h: el.querySelector("[data-h]"),
+    m: el.querySelector("[data-m]"), s: el.querySelector("[data-s]"),
+    haystack: (g.title + " " + g.platforms.join(" ")).toLowerCase()
+  };
+});
+
+function setText(node, v){ if(node.textContent !== v) node.textContent = v; }
+
+// Single interval updates every card.
+function tick(){
+  const now = Date.now();
+  for(const it of items){
+    if(it.out) continue;
+    const diff = it.target - now;
+    if(diff <= 0){
+      it.out = true;
+      it.el.classList.add("out");
+      continue;
+    }
+    const t = Math.floor(diff / 1000);
+    setText(it.d, pad(Math.floor(t / 86400)));
+    setText(it.h, pad(Math.floor(t % 86400 / 3600)));
+    setText(it.m, pad(Math.floor(t % 3600 / 60)));
+    setText(it.s, pad(t % 60));
+  }
+}
+tick();
+let timer = setInterval(tick, 1000);
+document.addEventListener("visibilitychange", () => {   // save CPU in background tabs
+  clearInterval(timer);
+  if(!document.hidden){ tick(); timer = setInterval(tick, 1000); }
+});
+
+// Search / filter by title or platform
+document.getElementById("search").addEventListener("input", e => {
+  const q = e.target.value.trim().toLowerCase();
+  let shown = 0;
+  for(const it of items){
+    const match = !q || it.haystack.includes(q);
+    it.el.style.display = match ? "" : "none";
+    if(match) shown++;
+  }
+  emptyMsg.style.display = shown ? "none" : "block";
+});
+
+/* ============================================================
+   PARTICLES (lightweight canvas)
+   ============================================================ */
+(function(){
+  const cv = document.getElementById("particles"), ctx = cv.getContext("2d");
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  let w, h, pts = [];
+  function resize(){
+    w = cv.width = innerWidth; h = cv.height = innerHeight;
+    pts = Array.from({length: Math.min(70, Math.floor(w * h / 22000))}, () => ({
+      x: Math.random()*w, y: Math.random()*h,
+      r: Math.random()*1.6 + .4, vx: (Math.random()-.5)*.25, vy: -Math.random()*.35 - .05,
+      a: Math.random()*.5 + .15
+    }));
+  }
+  resize(); addEventListener("resize", resize);
+  (function frame(){
+    ctx.clearRect(0,0,w,h);
+    for(const p of pts){
+      p.x += p.vx; p.y += p.vy;
+      if(p.y < -5){ p.y = h + 5; p.x = Math.random()*w; }
+      if(p.x < -5) p.x = w + 5; else if(p.x > w + 5) p.x = -5;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.283);
+      ctx.fillStyle = `rgba(160,190,255,${p.a})`; ctx.fill();
+    }
+    requestAnimationFrame(frame);
+  })();
+})();
+</script>
+</body>
+</html>
